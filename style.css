@@ -165,8 +165,16 @@ body {
   color: var(--muted);
 }
 
-.item.is-blocked { opacity: 0.4; }
+.item.is-blocked .item__row,
+.item.is-blocked .item__desc { opacity: 0.4; }
 .item.is-blocked .item__name { text-decoration: line-through; }
+
+.item__warn {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+}
 
 /* Alt bilgi */
 .foot {

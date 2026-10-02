@@ -46,6 +46,10 @@
       if (item.tag) node.appendChild(el("p", "item__tag", item.tag));
       if (item.note) node.appendChild(el("p", "item__note", item.note));
 
+      var warn = el("p", "item__warn");
+      warn.hidden = true;
+      node.appendChild(warn);
+
       sec.appendChild(node);
     });
 
@@ -117,6 +121,12 @@
       var keys = node.dataset.allergens ? node.dataset.allergens.split(",") : [];
       var hits = keys.filter(function (k) { return selected.has(k); });
       node.classList.toggle("is-blocked", hits.length > 0);
+
+      var warn = node.querySelector(".item__warn");
+      warn.hidden = hits.length === 0;
+      warn.textContent = hits.length
+        ? "İçerir: " + hits.map(function (k) { return window.ALLERGENS[k]; }).join(", ")
+        : "";
     });
   }
 
