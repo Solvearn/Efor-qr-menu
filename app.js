@@ -46,20 +46,6 @@
       if (item.tag) node.appendChild(el("p", "item__tag", item.tag));
       if (item.note) node.appendChild(el("p", "item__note", item.note));
 
-      if (item.a && item.a.length) {
-        var list = el("div", "item__allergens");
-        item.a.forEach(function (key) {
-          var t = el("span", "tag", window.ALLERGENS[key]);
-          t.dataset.key = key;
-          list.appendChild(t);
-        });
-        node.appendChild(list);
-      }
-
-      var warn = el("p", "item__warn");
-      warn.hidden = true;
-      node.appendChild(warn);
-
       sec.appendChild(node);
     });
 
@@ -131,16 +117,6 @@
       var keys = node.dataset.allergens ? node.dataset.allergens.split(",") : [];
       var hits = keys.filter(function (k) { return selected.has(k); });
       node.classList.toggle("is-blocked", hits.length > 0);
-
-      var warn = node.querySelector(".item__warn");
-      warn.hidden = hits.length === 0;
-      warn.textContent = hits.length
-        ? "İçerir: " + hits.map(function (k) { return window.ALLERGENS[k]; }).join(", ")
-        : "";
-
-      node.querySelectorAll(".tag").forEach(function (t) {
-        t.classList.toggle("is-hit", selected.has(t.dataset.key));
-      });
     });
   }
 

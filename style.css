@@ -165,34 +165,8 @@ body {
   color: var(--muted);
 }
 
-.item__allergens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 7px;
-}
-.tag {
-  padding: 2px 8px;
-  border: 1px solid var(--muted);
-  border-radius: 999px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.tag.is-hit {
-  border-color: var(--warn);
-  background: var(--warn);
-  color: #fff;
-  font-weight: 700;
-}
-
 .item.is-blocked { opacity: 0.4; }
 .item.is-blocked .item__name { text-decoration: line-through; }
-.item__warn {
-  margin: 6px 0 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--warn);
-}
 
 /* Alt bilgi */
 .foot {
