@@ -1,0 +1,239 @@
+:root {
+  --bg: #f7f4ec;
+  --ink: #111;
+  --muted: #5c5b56;
+  --soft: #e9e5d9;
+  --warn: #9c2f1f;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+.sheet {
+  max-width: 1000px;
+  margin: 12px auto;
+  border: 1px solid var(--ink);
+}
+
+@media (max-width: 1024px) {
+  .sheet { margin: 10px; }
+}
+
+/* Üst başlık */
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 110px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.masthead__word {
+  font-weight: 300;
+  font-size: 24px;
+  letter-spacing: 0.15em;
+}
+
+/* Kategori sekmeleri */
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--ink);
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tabs a {
+  flex: none;
+  padding: 7px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tabs a.is-active {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Alerjen filtresi */
+.allergy {
+  border-bottom: 1px solid var(--ink);
+}
+.allergy summary {
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.allergy summary::-webkit-details-marker { display: none; }
+.allergy summary::after { content: "+"; font-size: 20px; font-weight: 300; }
+.allergy[open] summary::after { content: "–"; }
+.allergy__body { padding: 0 24px 18px; }
+.allergy__body p { margin: 0 0 12px; font-size: 13px; color: var(--muted); }
+.allergy__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  padding: 7px 13px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: #fff;
+}
+.allergy__clear {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Menü bölümleri */
+.menu { padding: 8px 0 16px; }
+
+.section {
+  padding: 28px 24px 8px;
+  scroll-margin-top: 58px;
+  break-inside: avoid;
+}
+.section__title {
+  margin: 0 0 18px;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.item { margin-bottom: 20px; transition: opacity 0.2s; }
+
+.item__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.item__name { font-weight: 700; font-size: 16px; line-height: 1.3; }
+.item__price { flex: none; font-weight: 400; font-size: 16px; white-space: nowrap; }
+
+.item__desc {
+  margin: 4px 0 0;
+  max-width: 34em;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.item__tag, .item__note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.item__allergens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+.tag {
+  padding: 2px 8px;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.tag.is-hit {
+  border-color: var(--warn);
+  background: var(--warn);
+  color: #fff;
+  font-weight: 700;
+}
+
+.item.is-blocked { opacity: 0.4; }
+.item.is-blocked .item__name { text-decoration: line-through; }
+.item__warn {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+}
+
+/* Alt bilgi */
+.foot {
+  padding: 20px 24px 28px;
+  border-top: 1px solid var(--ink);
+  text-align: center;
+}
+.foot__note {
+  max-width: 40em;
+  margin: 0 auto 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.foot__name {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.foot__ig {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Geniş ekran: PDF'teki iki sütunlu yerleşim */
+@media (min-width: 820px) {
+  .menu {
+    columns: 2;
+    column-gap: 0;
+    column-rule: 1px solid var(--ink);
+  }
+  .section { padding: 28px 32px 8px; }
+  .masthead, .allergy summary, .allergy__body, .foot { padding-left: 32px; padding-right: 32px; }
+  .masthead { height: 150px; }
+  .masthead__word { font-size: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

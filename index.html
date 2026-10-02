@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f4ec">
+  <title>Menü | Efor At Çiftliği</title>
+  <meta name="description" content="Efor At Çiftliği menüsü: kahvaltı, burger, makarna, tatlı ve içecekler. Alerjen bilgileriyle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sheet">
+    <header class="masthead">
+      <span class="masthead__word">M E N Ü</span>
+      <span class="masthead__word">M E N Ü</span>
+    </header>
+
+    <nav class="tabs" id="tabs" aria-label="Kategoriler"></nav>
+
+    <details class="allergy" id="allergy">
+      <summary>Alerjenim var</summary>
+      <div class="allergy__body">
+        <p>Kaçınmak istediğiniz alerjenleri seçin. İçeren ürünler soluklaşır ve işaretlenir.</p>
+        <div class="allergy__chips" id="allergy-chips"></div>
+        <button type="button" class="allergy__clear" id="allergy-clear" hidden>Seçimi temizle</button>
+      </div>
+    </details>
+
+    <main class="menu" id="menu"></main>
+
+    <footer class="foot">
+      <p class="foot__note">
+        Alerjen bilgileri ürün içeriklerine göre hazırlanmıştır. Mutfakta çapraz bulaşma olabilir.
+        Ciddi bir alerjiniz varsa sipariş vermeden önce mutlaka personelimize bildirin.
+      </p>
+      <p class="foot__name">Efor At Çiftliği</p>
+      <a class="foot__ig" href="https://www.instagram.com/eforatlisporkulubu/" target="_blank" rel="noopener">@eforatlisporkulubu</a>
+    </footer>
+  </div>
+
+  <script src="menu.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
