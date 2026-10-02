@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Menü Yönetimi | Efor At Çiftliği</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Giriş -->
+  <main class="login" id="login" hidden>
+    <form class="login__card" id="login-form" autocomplete="on">
+      <h1>Menü Yönetimi</h1>
+      <p class="muted">Efor At Çiftliği</p>
+      <label>Kullanıcı adı
+        <input name="username" id="login-user" autocomplete="username" required>
+      </label>
+      <label>Şifre
+        <input name="password" id="login-pass" type="password" autocomplete="current-password" required>
+      </label>
+      <p class="error" id="login-error" role="alert" hidden></p>
+      <button class="btn btn--primary" type="submit" id="login-submit">Giriş yap</button>
+    </form>
+  </main>
+
+  <!-- Panel -->
+  <div class="app" id="app" hidden>
+    <header class="bar">
+      <strong class="bar__title">Menü Yönetimi</strong>
+      <span class="bar__status" id="status" aria-live="polite"></span>
+      <button class="btn btn--primary" id="save" type="button" disabled>Kaydet</button>
+      <a class="btn" href="/" target="_blank" rel="noopener">Menüyü gör</a>
+      <button class="btn" id="logout" type="button">Çıkış</button>
+    </header>
+
+    <nav class="views" id="views">
+      <button type="button" data-view="items" class="is-active">Ürünler</button>
+      <button type="button" data-view="allergens">Alerjenler</button>
+    </nav>
+
+    <div class="layout" id="layout"></div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="menu.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

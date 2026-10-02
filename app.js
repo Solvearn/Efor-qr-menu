@@ -1,6 +1,14 @@
 (function () {
   var STORE_KEY = "menu-allergens";
   var selected = new Set();
+  var data = null;
+  var observer = null;
+
+  var menuEl = document.getElementById("menu");
+  var tabsEl = document.getElementById("tabs");
+  var chipsEl = document.getElementById("allergy-chips");
+  var clearBtn = document.getElementById("allergy-clear");
+  var summary = document.querySelector("#allergy summary");
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -10,13 +18,12 @@
   }
 
   function price(p) {
-    return p.toFixed(2) + " ₺";
+    return Number(p).toFixed(2) + " ₺";
   }
 
   function loadSelection() {
     try {
-      var saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
-      saved.forEach(function (k) { if (window.ALLERGENS[k]) selected.add(k); });
+      JSON.parse(localStorage.getItem(STORE_KEY) || "[]").forEach(function (k) { selected.add(k); });
     } catch (e) { /* depolama yoksa sorun değil */ }
   }
 
@@ -24,48 +31,88 @@
     try { localStorage.setItem(STORE_KEY, JSON.stringify(Array.from(selected))); } catch (e) {}
   }
 
-  // --- Menü ---
-  var menuEl = document.getElementById("menu");
-  var tabsEl = document.getElementById("tabs");
+  // Menü verisi: önce yönetim panelinin kaydettiği veri, olmazsa menu.js içindeki varsayılan.
+  function seed() {
+    return { allergens: window.ALLERGENS, categories: window.MENU };
+  }
 
-  window.MENU.forEach(function (section) {
-    var sec = el("section", "section");
-    sec.id = section.id;
-    sec.appendChild(el("h2", "section__title", section.title));
+  function load() {
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 4000);
+    return fetch("/api/menu", ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        return j && j.menu && Array.isArray(j.menu.categories) && j.menu.allergens ? j.menu : null;
+      })
+      .catch(function () { return null; })
+      .then(function (m) { clearTimeout(timer); return m || seed(); });
+  }
 
-    section.items.forEach(function (item) {
-      var node = el("article", "item");
-      node.dataset.allergens = (item.a || []).join(",");
+  // --- Çizim ---
+  function render(d) {
+    data = d;
+    menuEl.textContent = "";
+    tabsEl.textContent = "";
+    chipsEl.textContent = "";
 
-      var row = el("div", "item__row");
-      row.appendChild(el("span", "item__name", item.n));
-      row.appendChild(el("span", "item__price", price(item.p)));
-      node.appendChild(row);
+    // Artık var olmayan alerjenleri seçimden düş
+    Array.from(selected).forEach(function (k) { if (!data.allergens[k]) selected.delete(k); });
 
-      if (item.d) node.appendChild(el("p", "item__desc", item.d));
-      if (item.tag) node.appendChild(el("p", "item__tag", item.tag));
-      if (item.note) node.appendChild(el("p", "item__note", item.note));
+    data.categories.forEach(function (section) {
+      if (!section.items.length) return;
 
-      var warn = el("p", "item__warn");
-      warn.hidden = true;
-      node.appendChild(warn);
+      var sec = el("section", "section");
+      sec.id = section.id;
+      sec.appendChild(el("h2", "section__title", section.title));
 
-      sec.appendChild(node);
+      section.items.forEach(function (item) {
+        var node = el("article", "item");
+        node.dataset.allergens = (item.a || []).join(",");
+
+        var row = el("div", "item__row");
+        row.appendChild(el("span", "item__name", item.n));
+        row.appendChild(el("span", "item__price", price(item.p)));
+        node.appendChild(row);
+
+        if (item.d) node.appendChild(el("p", "item__desc", item.d));
+        if (item.tag) node.appendChild(el("p", "item__tag", item.tag));
+        if (item.note) node.appendChild(el("p", "item__note", item.note));
+
+        var warn = el("p", "item__warn");
+        warn.hidden = true;
+        node.appendChild(warn);
+
+        sec.appendChild(node);
+      });
+
+      menuEl.appendChild(sec);
+
+      var tab = el("a", null, section.title);
+      tab.href = "#" + section.id;
+      tab.dataset.target = section.id;
+      tabsEl.appendChild(tab);
     });
 
-    menuEl.appendChild(sec);
+    Object.keys(data.allergens).forEach(function (key) {
+      var chip = el("button", "chip", data.allergens[key]);
+      chip.type = "button";
+      chip.dataset.key = key;
+      chip.setAttribute("aria-pressed", "false");
+      chip.addEventListener("click", function () {
+        if (selected.has(key)) selected.delete(key); else selected.add(key);
+        saveSelection();
+        apply();
+      });
+      chipsEl.appendChild(chip);
+    });
 
-    var tab = el("a", null, section.title);
-    tab.href = "#" + section.id;
-    tab.dataset.target = section.id;
-    tabsEl.appendChild(tab);
-  });
+    observe();
+    apply();
+  }
 
   // --- Aktif sekme ---
-  var tabLinks = Array.from(tabsEl.querySelectorAll("a"));
-
   function setActive(id) {
-    tabLinks.forEach(function (a) {
+    tabsEl.querySelectorAll("a").forEach(function (a) {
       var on = a.dataset.target === id;
       a.classList.toggle("is-active", on);
       if (on) {
@@ -75,33 +122,18 @@
     });
   }
 
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
+  function observe() {
+    if (!("IntersectionObserver" in window)) return;
+    if (observer) observer.disconnect();
+    observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) setActive(e.target.id);
       });
     }, { rootMargin: "-20% 0px -70% 0px" });
-    document.querySelectorAll(".section").forEach(function (s) { io.observe(s); });
+    document.querySelectorAll(".section").forEach(function (s) { observer.observe(s); });
   }
 
   // --- Alerjen filtresi ---
-  var chipsEl = document.getElementById("allergy-chips");
-  var clearBtn = document.getElementById("allergy-clear");
-  var summary = document.querySelector("#allergy summary");
-
-  Object.keys(window.ALLERGENS).forEach(function (key) {
-    var chip = el("button", "chip", window.ALLERGENS[key]);
-    chip.type = "button";
-    chip.dataset.key = key;
-    chip.setAttribute("aria-pressed", "false");
-    chip.addEventListener("click", function () {
-      if (selected.has(key)) selected.delete(key); else selected.add(key);
-      saveSelection();
-      apply();
-    });
-    chipsEl.appendChild(chip);
-  });
-
   clearBtn.addEventListener("click", function () {
     selected.clear();
     saveSelection();
@@ -125,11 +157,12 @@
       var warn = node.querySelector(".item__warn");
       warn.hidden = hits.length === 0;
       warn.textContent = hits.length
-        ? "İçerir: " + hits.map(function (k) { return window.ALLERGENS[k]; }).join(", ")
+        ? "İçerir: " + hits.map(function (k) { return data.allergens[k]; }).join(", ")
         : "";
     });
   }
 
   loadSelection();
-  apply();
+  menuEl.appendChild(el("p", "loading", "Menü yükleniyor…"));
+  load().then(render);
 })();

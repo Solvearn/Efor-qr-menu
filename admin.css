@@ -1,0 +1,145 @@
+:root {
+  --bg: #f7f4ec;
+  --card: #fffdf8;
+  --ink: #111;
+  --muted: #5c5b56;
+  --line: #d8d3c4;
+  --danger: #9c2f1f;
+  --ok: #2f6b3a;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+}
+
+.muted { color: var(--muted); }
+.error { color: var(--danger); font-size: 14px; margin: 0; }
+
+input, textarea, select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+textarea { resize: vertical; min-height: 64px; }
+label { display: block; font-size: 13px; font-weight: 700; }
+label > input, label > textarea, label > select { margin-top: 5px; font-weight: 400; }
+
+.btn {
+  display: inline-block;
+  padding: 9px 15px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover:not(:disabled) { background: var(--line); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn--primary { background: var(--ink); color: var(--bg); }
+.btn--primary:hover:not(:disabled) { background: #333; }
+.btn--danger { border-color: var(--danger); color: var(--danger); }
+.btn--small { padding: 5px 10px; font-size: 13px; }
+
+/* Giriş */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+.login__card {
+  width: 100%; max-width: 360px; padding: 28px 24px;
+  background: var(--card); border: 1px solid var(--ink);
+  display: grid; gap: 14px;
+}
+.login__card h1 { margin: 0; font-weight: 300; font-size: 26px; letter-spacing: 0.02em; }
+.login__card p { margin: 0; }
+
+/* Üst çubuk */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--ink);
+}
+.bar__title { font-size: 17px; font-weight: 800; margin-right: auto; }
+.bar__status { font-size: 13px; color: var(--muted); }
+.bar__status.is-dirty { color: var(--danger); font-weight: 700; }
+.bar__status.is-saved { color: var(--ok); font-weight: 700; }
+
+.views { display: flex; gap: 6px; padding: 12px 16px 0; }
+.views button {
+  padding: 8px 16px; border: 1px solid var(--ink); border-radius: 999px;
+  background: transparent; font: inherit; font-size: 14px; cursor: pointer;
+}
+.views button.is-active { background: var(--ink); color: var(--bg); }
+
+.layout { display: grid; gap: 16px; padding: 16px; max-width: 1100px; margin: 0 auto; }
+@media (max-width: 859px) {
+  .cats { max-height: 230px; overflow-y: auto; }
+}
+@media (min-width: 860px) {
+  .layout.has-side { grid-template-columns: 280px 1fr; align-items: start; }
+}
+
+.panel { background: var(--card); border: 1px solid var(--ink); padding: 16px; }
+.panel h2 { margin: 0 0 12px; font-size: 16px; font-weight: 800; }
+
+/* Kategori listesi */
+.cats { display: grid; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
+.cat {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+}
+.cat.is-active { border-color: var(--ink); background: #fff; font-weight: 700; }
+.cat__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cat__count { font-size: 12px; color: var(--muted); }
+.icon-btn {
+  padding: 2px 7px; border: 1px solid var(--line); border-radius: 4px;
+  background: transparent; font: inherit; font-size: 13px; cursor: pointer; line-height: 1.4;
+}
+.icon-btn:hover:not(:disabled) { border-color: var(--ink); }
+.icon-btn:disabled { opacity: 0.3; cursor: default; }
+
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.row--end { justify-content: flex-end; }
+.grow { flex: 1; min-width: 0; }
+
+.cat-edit { display: grid; gap: 10px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+
+/* Ürün kartları */
+.items { display: grid; gap: 12px; }
+.item-card { border: 1px solid var(--ink); background: #fff; padding: 14px; display: grid; gap: 10px; }
+.item-card__top { display: grid; grid-template-columns: 1fr 110px; gap: 10px; }
+.item-card__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) {
+  .item-card__grid { grid-template-columns: 1fr; }
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 5px 11px; border: 1px solid var(--ink); border-radius: 999px;
+  background: transparent; font: inherit; font-size: 13px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--danger); border-color: var(--danger); color: #fff; }
+.field-title { font-size: 13px; font-weight: 700; margin: 0 0 6px; }
+.empty { color: var(--muted); padding: 20px; text-align: center; border: 1px dashed var(--line); }
+
+/* Alerjen listesi */
+.allergen-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.allergen-row code { font-size: 12px; color: var(--muted); min-width: 90px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+  max-width: calc(100% - 32px); padding: 11px 18px; border-radius: 8px;
+  background: var(--ink); color: var(--bg); font-size: 14px; z-index: 50;
+}
+.toast.is-error { background: var(--danger); color: #fff; }
